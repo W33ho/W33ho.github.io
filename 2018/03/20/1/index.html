@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="UO,NOIJ," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="UOJ#6 【NOI2014】随机数生成器 题目读到最后才发现这道题目跟生成器没什么大关系…题解直入正题前面的操作省略 直接讲数组生成之后 注意题目因为题目当中有一句话叫做 路径排序之后字典序最小所以这个时候我们就应该考虑如何维护其单调性（脑中想的是：单调队列 差分约束 大小根堆 以及我不知道的高端操作…） 最后 我决定贪心… 由于每一个数字只出现一次 所以我们可以每一个数字都进行讨论 我们一定是">
+<meta name="keywords" content="UO,NOIJ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="随机数生成器">
+<meta property="og:url" content="http://yoursite.com/2018/03/20/1/index.html">
+<meta property="og:site_name" content="Sumail">
+<meta property="og:description" content="UOJ#6 【NOI2014】随机数生成器 题目读到最后才发现这道题目跟生成器没什么大关系…题解直入正题前面的操作省略 直接讲数组生成之后 注意题目因为题目当中有一句话叫做 路径排序之后字典序最小所以这个时候我们就应该考虑如何维护其单调性（脑中想的是：单调队列 差分约束 大小根堆 以及我不知道的高端操作…） 最后 我决定贪心… 由于每一个数字只出现一次 所以我们可以每一个数字都进行讨论 我们一定是">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-20T13:29:38.100Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="随机数生成器">
+<meta name="twitter:description" content="UOJ#6 【NOI2014】随机数生成器 题目读到最后才发现这道题目跟生成器没什么大关系…题解直入正题前面的操作省略 直接讲数组生成之后 注意题目因为题目当中有一句话叫做 路径排序之后字典序最小所以这个时候我们就应该考虑如何维护其单调性（脑中想的是：单调队列 差分约束 大小根堆 以及我不知道的高端操作…） 最后 我决定贪心… 由于每一个数字只出现一次 所以我们可以每一个数字都进行讨论 我们一定是">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/20/1/"/>
+
+
+
+
+
+  <title>随机数生成器 | Sumail</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+    <a href="https://github.com/W33ho" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sumail</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/20/1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sumail">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">随机数生成器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-20T21:21:25+08:00">
+                2018-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  917
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://uoj.ac/problem/6" target="_blank" rel="noopener">UOJ#6 【NOI2014】随机数生成器</a></p>
+<h3 id="题目读到最后才发现这道题目跟生成器没什么大关系…"><a href="#题目读到最后才发现这道题目跟生成器没什么大关系…" class="headerlink" title="题目读到最后才发现这道题目跟生成器没什么大关系…"></a>题目读到最后才发现这道题目跟生成器没什么大关系…</h3><h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="直入正题"><a href="#直入正题" class="headerlink" title="直入正题"></a>直入正题</h3><p><strong>前面的操作省略 直接讲数组生成之后</strong></p>
+<h3 id="注意题目"><a href="#注意题目" class="headerlink" title="注意题目"></a>注意题目</h3><p>因为题目当中有一句话叫做 路径排序之后<strong>字典序最小</strong><br>所以这个时候我们就应该考虑如何维护其单调性<br>（脑中想的是：单调队列 差分约束 大小根堆 以及我不知道的高端操作…）</p>
+<p>最后 我决定贪心…</p>
+<pre><code>由于每一个数字只出现一次 所以我们可以每一个数字都进行讨论
+</code></pre><p>我们一定是要保证1在内的<br>所以我们先要往一个空的棋盘里加入一个1</p>
+<p>然后我们就很<strong>贪心</strong>地希望2也在里头<br>所以我们就想知道 2 能不能在1所在的路径上呢？</p>
+<h3 id="约束条件"><a href="#约束条件" class="headerlink" title="约束条件"></a>约束条件</h3><p>所以我们此时需要更加仔细地读题<br>题目当中说道 路径的<strong>下一个点只能往右/下走</strong></p>
+<p>也就是说 路径中的任何一个点和其它点的关系是</p>
+<pre><code>要么在这个点的左上方
+要么在这个点的右下方
+</code></pre><p>所以 我们在加入2的时候 需要判断2相对于1的位置<br>满足上述条件 就加入路径</p>
+<h3 id="进一步贪心"><a href="#进一步贪心" class="headerlink" title="进一步贪心"></a>进一步贪心</h3><p>加了多个点之后 又怎么对当前点进行判定呢？</p>
+<p>假如当前点在第x行的第y个位置</p>
+<p>那么对于1到x-1行 所有数字的位置都应该&lt;=y<br>对于 x+1到n行 所有的数字的位置都应该&gt;=y</p>
+<p>所以有人（不是我）就想到了一个<strong>骚操作</strong></p>
+<pre><code>开两个数字 high[x] 和 low[x]
+high[x]记录 x+1 到 n 行 所有路径上的数字的最小位置
+low[x]记录 1 到 x-1 行 所有路径上的数字的最大位置
+
+那么对于位置 x行 y列
+    若y&gt;=high[x]&amp;&amp;y&lt;=low[x] 则该点可以放到路径上
+然后再对high和low进行更新
+
+对于xi&lt;x high[xi]=min(high[xi],y)（因为当前点在xi的下方）
+对于xi&gt;x low[xi]=max(low[xi],y)（因为当前点在xi的上方）
+</code></pre><p>于是我们就成功地贪心出了一条路径</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p><strong>x数组在生成的时候可能会存在超int的情况 因此要用 1LL 之类的操作来避免超int</strong></p>
+<h3 id="code（欢迎hack）"><a href="#code（欢迎hack）" class="headerlink" title="code（欢迎hack）"></a>code（欢迎hack）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;cstdio&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int N,M,m,x[25001234],T[25001234];</span><br><span class="line">int low[5123],high[5123];</span><br><span class="line"></span><br><span class="line">inline int input()</span><br><span class="line">&#123;</span><br><span class="line">	char c=getchar();int o;</span><br><span class="line">	while(c&gt;57||c&lt;48)c=getchar();</span><br><span class="line">	for(o=0;c&gt;47&amp;&amp;c&lt;58;c=getchar())o=(o&lt;&lt;1)+(o&lt;&lt;3)+c-48;</span><br><span class="line">	return o;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bool add(int nx,int ny)</span><br><span class="line">&#123;</span><br><span class="line">	for(int i=1;i&lt;=N;i++)</span><br><span class="line">		if(i&lt;ny)high[i]=min(nx,high[i]);</span><br><span class="line">		else if(i&gt;ny)low[i]=max(nx,low[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">//	freopen(&quot;In.txt&quot;,&quot;r&quot;,stdin);</span><br><span class="line">	long long a,b,c,d,Q,tot=0,NM;</span><br><span class="line">	x[0]=input();a=input();b=input();c=input();d=input();</span><br><span class="line">	N=input();M=input();Q=input();m=M-1;NM=N*M;</span><br><span class="line">	for(int i=1;i&lt;=N;i++)high[i]=M;</span><br><span class="line">	for(int i=1;i&lt;=NM;i++)x[i]=(x[i-1]*(a*x[i-1]+b)+c)%d,T[i]=i;</span><br><span class="line">	for(int i=1;i&lt;=NM;i++)swap(T[i],T[x[i]%i+1]);</span><br><span class="line">	for(int i=1;i&lt;=Q;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		a=input();b=input();</span><br><span class="line">		swap(T[a],T[b]);</span><br><span class="line">	&#125;</span><br><span class="line">	for(int i=1;i&lt;=NM;i++)x[T[i]]=i;</span><br><span class="line">	for(int i=1,p=x[i];i&lt;=NM;i++,p=x[i])</span><br><span class="line">	&#123;</span><br><span class="line">		int nx=p%M,ny=(p+m)/M;</span><br><span class="line">		if(!nx)nx=M;</span><br><span class="line">		if(nx&gt;=low[ny]&amp;&amp;nx&lt;=high[ny])</span><br><span class="line">		&#123;</span><br><span class="line">			add(nx,ny);</span><br><span class="line">			if(++tot==N+M-1)printf(&quot;%d&quot;,i);</span><br><span class="line">			else printf(&quot;%d &quot;,i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/UO/" rel="tag"># UO</a>
+          
+            <a href="/tags/NOIJ/" rel="tag"># NOIJ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/20/NOI/" rel="prev" title="NOI!">
+                NOI! <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目读到最后才发现这道题目跟生成器没什么大关系…"><span class="nav-number">1.</span> <span class="nav-text">题目读到最后才发现这道题目跟生成器没什么大关系…</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题解"><span class="nav-number"></span> <span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直入正题"><span class="nav-number">1.</span> <span class="nav-text">直入正题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意题目"><span class="nav-number">2.</span> <span class="nav-text">注意题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#约束条件"><span class="nav-number">3.</span> <span class="nav-text">约束条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进一步贪心"><span class="nav-number">4.</span> <span class="nav-text">进一步贪心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意"><span class="nav-number">5.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code（欢迎hack）"><span class="nav-number">6.</span> <span class="nav-text">code（欢迎hack）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>--->
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/javascript"
+    color="255,153,18" opacity='0.4' zIndex="-1" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+  
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+  
+
+</body>
+</html>
